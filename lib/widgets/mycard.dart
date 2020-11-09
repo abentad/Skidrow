@@ -30,7 +30,7 @@ class MyCard extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10.0),
               image: DecorationImage(
-                image: AssetImage(imageString),
+                image: NetworkImage(imageString),
                 fit: BoxFit.fill,
               ),
             ),
@@ -63,6 +63,7 @@ class MyCard extends StatelessWidget {
                           style: GoogleFonts.montserrat(
                             textStyle: TextStyle(
                               color: Colors.white,
+                              fontWeight: FontWeight.bold,
                               fontSize: 14.0,
                             ),
                           ),
@@ -72,8 +73,9 @@ class MyCard extends StatelessWidget {
                           crackedBy,
                           style: GoogleFonts.montserrat(
                             textStyle: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 14.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10.0,
                             ),
                           ),
                         ),

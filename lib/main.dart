@@ -1,4 +1,4 @@
-import 'package:Skidrow/screens/home_screen.dart';
+import 'package:Skidrow/screens/loading_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         secondaryHeaderColor: Color(0xff6b6b6e),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomeScreen(),
+      home: LoadingScreen(),
     );
   }
 }
