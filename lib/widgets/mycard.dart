@@ -5,8 +5,15 @@ class MyCard extends StatelessWidget {
   final String imageString;
   final String gameName;
   final String crackedBy;
+  final double height;
+  final double width;
 
-  MyCard({this.crackedBy, this.gameName, this.imageString});
+  MyCard(
+      {this.crackedBy,
+      this.gameName,
+      this.imageString,
+      this.height,
+      this.width});
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +24,11 @@ class MyCard extends StatelessWidget {
         children: [
           SizedBox(height: 20.0),
           Container(
-            height: 200,
-            width: double.infinity,
+            // height: 200,
+            // // width: double.infinity,
+            // width: 340.0,
+            height: height,
+            width: width,
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(

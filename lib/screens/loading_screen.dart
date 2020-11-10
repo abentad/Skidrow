@@ -13,6 +13,9 @@ class LoadingScreen extends StatefulWidget {
 
 class _LoadingScreenState extends State<LoadingScreen> {
   List<Games> games = [];
+  List<Games> trendingGames = [];
+  //
+  //
   _fetchData() async {
     String url = 'https://www.skidrow-games.com/';
     var response = await http.get(url);
@@ -23,7 +26,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
           document.querySelectorAll(".post .post-excerpt > center > p > img");
       final postsCrackedByClass =
           document.querySelectorAll(".post .post-excerpt > center > p > span");
-      for (var i = 0; i < 12; i++) {
+      final postsTrendingClass =
+          document.querySelectorAll("#text-5 > div > p > a > img");
+      //
+      //for featured games section
+      for (var i = 0; i < postsNameClass.length; i++) {
         games.add(
           Games(
             imageString:
@@ -33,15 +40,24 @@ class _LoadingScreenState extends State<LoadingScreen> {
           ),
         );
       }
-      // for (Games game in games) {
-      //   print(game.imageString);
-      //   print(game.gameName);
-      //   print(game.crackedBy);
-      // }
+      //for the trending section
+      for (var i = 0; i < postsTrendingClass.length; i++) {
+        trendingGames.add(
+          Games(
+            imageString: postsTrendingClass[i]
+                .attributes['data-lazy-src']
+                .toString()
+                .trim(),
+          ),
+        );
+      }
       Navigator.push(
         context,
         CupertinoPageRoute(
-          builder: (context) => HomeScreen(games: games),
+          builder: (context) => HomeScreen(
+            games: games,
+            trendingGames: trendingGames,
+          ),
         ),
       );
     }

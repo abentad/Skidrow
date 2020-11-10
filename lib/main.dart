@@ -5,8 +5,9 @@ import 'package:flutter/services.dart';
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
-      statusBarColor: Color(0xff101116),
-      statusBarIconBrightness: Brightness.light,
+      // statusBarColor: Color(0xff101116),
+      statusBarColor: Colors.white,
+      statusBarIconBrightness: Brightness.dark,
     ),
   );
   runApp(MyApp());
@@ -19,9 +20,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Skidrow',
       theme: ThemeData(
-        scaffoldBackgroundColor: Color(0xff101116),
-        primaryColor: Color(0xff101116),
-        secondaryHeaderColor: Color(0xff6b6b6e),
+        scaffoldBackgroundColor: Colors.white,
+        // scaffoldBackgroundColor: Color(0xff101116),
+        // primaryColor: Color(0xff101116),
+        primaryColor: Colors.white,
+        // secondaryHeaderColor: Color(0xff6b6b6e),
+        secondaryHeaderColor: Colors.black,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: LoadingScreen(),
