@@ -4,6 +4,9 @@ import 'package:Skidrow/widgets/mycard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:html/dom.dart' as dom;
+import 'package:http/http.dart' as http;
+import 'package:html/parser.dart' as parser;
 
 class HomeScreen extends StatefulWidget {
   final List<Games> games;
@@ -16,29 +19,21 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<Games> games = [];
   List<Games> trendingGames = [];
+
+  int page = 2;
+
+  bool isLoading = false;
+
+  //
+  //
+  //
   @override
   void initState() {
     super.initState();
-    print(widget.games.length);
-    print(widget.trendingGames.length);
+    // print(widget.games.length);
+    // print(widget.trendingGames.length);
     games.addAll(widget.games);
     trendingGames.addAll(widget.trendingGames);
-  }
-
-  _buildUi() {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: EdgeInsets.only(bottom: 40.0),
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: _buildFeatures(),
-          ),
-        ],
-      ),
-    );
   }
 
   _buildFeatures() {
@@ -123,18 +118,83 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Future<List<Games>> _fetchOtherData() async {
+    //
+    String url = 'https://www.skidrow-games.com/page/${page.toString()}/';
+    List<Games> loadedGames = [];
+    //
+    //
+    var response = await http.get(url);
+    //
+    if (response.statusCode == 200) {
+      dom.Document document = parser.parse(response.body);
+      final postsNameClass = document.querySelectorAll(".post > h2 > a");
+      final postsImgClass =
+          document.querySelectorAll(".post .post-excerpt > center > p > img");
+      final postsCrackedByClass =
+          document.querySelectorAll(".post .post-excerpt > center > p > span");
+
+      for (var i = 0; i < postsNameClass.length; i++) {
+        loadedGames.add(
+          Games(
+            imageString:
+                postsImgClass[i].attributes['data-lazy-src'].toString(),
+            gameName: postsNameClass[i].text.toString().trim(),
+            crackedBy: postsCrackedByClass[i].text.toString().trim(),
+          ),
+        );
+      }
+      return loadedGames;
+    }
+    return null;
+  }
+
+  _loadMoreGames() async {
+    isLoading = true;
+    print('loading page $page');
+    List<Games> moreGames = await _fetchOtherData();
+    setState(() {
+      games.addAll(moreGames);
+    });
+    print('loading done.');
+    print('loaded ${moreGames.length} games');
+    setState(() {
+      page++;
+    });
+    isLoading = false;
+  }
+
+  _buildUi() {
+    return NotificationListener<ScrollNotification>(
+      onNotification: (ScrollNotification scrollDetails) {
+        if (scrollDetails.metrics.pixels ==
+                scrollDetails.metrics.maxScrollExtent &&
+            !isLoading) {
+          _loadMoreGames();
+        }
+        return false;
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: EdgeInsets.only(bottom: 40.0),
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: _buildFeatures(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.menu,
-            color: Theme.of(context).secondaryHeaderColor,
-          ),
-        ),
         actions: [
           IconButton(
             icon: Icon(
@@ -144,6 +204,11 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {},
           )
         ],
+      ),
+      drawer: Drawer(
+        child: Center(
+          child: Text('drawer'),
+        ),
       ),
       body: _buildUi(),
     );

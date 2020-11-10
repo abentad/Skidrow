@@ -3,18 +3,19 @@ import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as parser;
 
 _fetchData() async {
-  String url = 'https://www.skidrow-games.com/';
+  // String url = 'https://www.skidrow-games.com/';
+  String url = 'https://www.skidrow-games.com/page/2/';
   var response = await http.get(url);
   if (response.statusCode == 200) {
     dom.Document document = parser.parse(response.body);
     final postsNameClass = document.querySelectorAll(".post > h2 > a");
-    // final postsImgClass =
-    //     document.querySelectorAll(".post .post-excerpt > center > p > img");
-    // final postsCrackedByClass =
-    //     document.querySelectorAll(".post .post-excerpt > center > p > span");
+    final postsImgClass =
+        document.querySelectorAll(".post .post-excerpt > center > p > img");
+    final postsCrackedByClass =
+        document.querySelectorAll(".post .post-excerpt > center > p > span");
 
-    // final postsTrendingClass =
-    //     document.querySelectorAll("#text-5 > div > p > a > img");
+    final postsTrendingClass =
+        document.querySelectorAll("#text-5 > div > p > a > img");
     //
     //
     //
@@ -36,7 +37,7 @@ _fetchData() async {
     // for (var i = 0; i < postsTrendingClass.length; i++) {
     //   print(postsTrendingClass[i].attributes['data-lazy-src']);
     // }
-    print(postsNameClass.length);
+    print(postsNameClass[0].text);
   }
 }
 
